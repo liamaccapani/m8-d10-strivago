@@ -1,12 +1,12 @@
-import express from "express";
+import express, { Request, Response, NextFunction} from 'express'
 import createHttpError from "http-errors";
 import { HostOnly } from "../../midllewares/auth/HostOnly.js";
-import accomodationModel from "../accomodations/schema.js";
+import accomodationModel from "./schema.js";
 import { tokenAuthMiddleware } from "../../midllewares/auth/tokenMiddleware.js";
 
 const accomodationsRouter = express.Router();
 
-accomodationsRouter.post("/register", tokenAuthMiddleware, HostOnly, async (req, res, next) => {
+accomodationsRouter.post("/register", tokenAuthMiddleware, HostOnly, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const newAccomodation = new accomodationModel(req.body);
     const saveAccomodation = await newAccomodation.save();
@@ -17,7 +17,7 @@ accomodationsRouter.post("/register", tokenAuthMiddleware, HostOnly, async (req,
 });
 
 // return FULL LIST of accommodations
-accomodationsRouter.get("/", tokenAuthMiddleware, async (req, res, next) => {
+accomodationsRouter.get("/", tokenAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
     try {
         const accomodations = await accomodationModel.find().populate('host');
         res.send(accomodations);
@@ -27,7 +27,7 @@ accomodationsRouter.get("/", tokenAuthMiddleware, async (req, res, next) => {
   }
 );
 
-accomodationsRouter.get("/:accomodationId", tokenAuthMiddleware, async (req, res, next) => {
+accomodationsRouter.get("/:accomodationId", tokenAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const accomodation = await accomodationModel.findById(req.params.accomodationId).populate('host');
       if(accomodation){
@@ -42,7 +42,7 @@ accomodationsRouter.get("/:accomodationId", tokenAuthMiddleware, async (req, res
 }
 );
 
-accomodationsRouter.put("/:accomodationId", tokenAuthMiddleware, HostOnly, async (req, res, next) => {
+accomodationsRouter.put("/:accomodationId", tokenAuthMiddleware, HostOnly, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const editedAccomodation = await accomodationModel.findByIdAndUpdate(
       req.params.accomodationId,
@@ -61,7 +61,7 @@ accomodationsRouter.put("/:accomodationId", tokenAuthMiddleware, HostOnly, async
 }
 );
 
-accomodationsRouter.delete("/:accomodationId", tokenAuthMiddleware, HostOnly, async (req, res, next) => {
+accomodationsRouter.delete("/:accomodationId", tokenAuthMiddleware, HostOnly, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const deleteAccomodation = await accomodationModel.findByIdAndDelete(
       req.params.accomodationId

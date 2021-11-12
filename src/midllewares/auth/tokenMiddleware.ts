@@ -1,14 +1,15 @@
 import createHttpError from "http-errors";
 import userModel from "../../services/users/schema.js"
 import { verifyToken } from "./tokenAuth.js";
+import { Request, Response, NextFunction } from 'express'
 
 
-export const tokenAuthMiddleware = async (req, res, next) => {
+export const tokenAuthMiddleware = async (req: any, res: Response, next: NextFunction) => {
   if (req.headers.authorization) {
     try {
       // const token = req.headers.authorization.split(" ")[1] OR
       const token = req.headers.authorization.replace("Bearer ", "");
-      const decodedToken = await verifyToken(token);
+      const decodedToken: any = await verifyToken(token);
       // decoded token = _id, iat, exp
       console.log("Decoded Token: ", decodedToken)
       // see payload JWTAuthGenerate

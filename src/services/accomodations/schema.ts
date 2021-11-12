@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
+
 const { Schema, model } = mongoose;
 
 const accomodationSchema = new Schema({
   city: { type: String, required: true },
   description: { type: String, required: true },
-  host: { type: Schema.ObjectId, ref: "User"},
+  host: { type: mongoose.Types.ObjectId, ref: "User"},
   maxGuests: { type: Number, required: true },
   name: { type: String, required: true }
 });

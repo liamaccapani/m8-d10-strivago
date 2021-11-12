@@ -2,8 +2,8 @@ import express from "express"
 import mongoose from "mongoose"
 import cors from "cors"
 import listEndpoints from "express-list-endpoints"
-import usersRouter from "../src/services/users/routes.js"
-import accomodationsRouter from "../src/services/accomodations/routes.js"
+import usersRouter from "./services/users/routes.js"
+import accomodationsRouter from "./services/accomodations/routes.js"
 
 import { badRequest, unauthorized, forbidden, notFound, serverError} from "./errorHandlers.js"
 
@@ -30,6 +30,10 @@ server.use(notFound)
 server.use(serverError)
 
 console.table(listEndpoints(server))
+
+if (!process.env.MONGO_CONNECTION) {
+  throw new Error("No MongoDB uri defined")
+}
 
 mongoose.connect(process.env.MONGO_CONNECTION)
 

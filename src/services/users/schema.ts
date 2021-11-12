@@ -1,10 +1,11 @@
 import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import accomodationSchema from "../accomodations/schema.js";
+import { UserDocument } from "../../types/interfaces"
 
 const { Schema, model } = mongoose;
 
-const userSchema = new Schema({
+const userSchema = new Schema<UserDocument>({
   name: { type: String, required: true },
   surname: { type: String, required: true },
   email: { type: String, required: true },

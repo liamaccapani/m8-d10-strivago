@@ -1,6 +1,6 @@
-import express from "express";
+import express, { Request, Response, NextFunction} from 'express'
 import createHttpError from "http-errors";
-import userModel from "../users/schema.js";
+import userModel from "./schema.js";
 import accomodationModel from "../accomodations/schema.js";
 import { tokenAuthMiddleware } from "../../midllewares/auth/tokenMiddleware.js";
 import { generateToken } from "../../midllewares/auth/tokenAuth.js";
@@ -11,7 +11,7 @@ import { validationResult } from "express-validator"
 
 const usersRouter = express.Router();
 
-usersRouter.post("/register", userValidation, async (req, res, next) => {
+usersRouter.post("/register", userValidation, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const errorsList = validationResult(req)
     if (!errorsList.isEmpty()) {
@@ -29,7 +29,7 @@ usersRouter.post("/register", userValidation, async (req, res, next) => {
   }
 });
 
-usersRouter.post("/login", async (req, res, next) => {
+usersRouter.post("/login", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body
     const user = await userModel.checkCredentials(email, password)
@@ -46,7 +46,7 @@ usersRouter.post("/login", async (req, res, next) => {
 
 
 // JUST FOR DEVELOPEMENT PURPOSES
-// usersRouter.get("/", tokenAuthMiddleware, HostOnly, async (req, res, next) => {
+// usersRouter.get("/", tokenAuthMiddleware, HostOnly, async (req: Request, res: Response, next: NextFunction) => {
 //   try {
 //       const users = await userModel.find();
 //       res.send(users);
@@ -56,7 +56,7 @@ usersRouter.post("/login", async (req, res, next) => {
 // }
 // );
 
-usersRouter.get("/me", tokenAuthMiddleware, async (req, res, next) => {
+usersRouter.get("/me", tokenAuthMiddleware, async (req: Request, res: Response, next: NextFunction) => {
   try {
       res.send(req.user);
   } catch (error) {
@@ -66,7 +66,7 @@ usersRouter.get("/me", tokenAuthMiddleware, async (req, res, next) => {
 );
 
 // 🎉 to be checked
-usersRouter.get("/me/accomodation", tokenAuthMiddleware, HostOnly, async (req, res, next) => {
+usersRouter.get("/me/accomodation", tokenAuthMiddleware, HostOnly, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.user._id
     console.log(userId)
@@ -78,7 +78,7 @@ usersRouter.get("/me/accomodation", tokenAuthMiddleware, HostOnly, async (req, r
 }
 );
 
-// usersRouter.get("/:userId", tokenAuthMiddleware, HostOnly, async (req, res, next) => {
+// usersRouter.get("/:userId", tokenAuthMiddleware, HostOnly, async (req: Request, res: Response, next: NextFunction) => {
 //     try {
 //         const user = await userModel.findById({_id: req.params.userId}).populate({path: 'accomodations', select: "name"})
 //         res.send(user)
