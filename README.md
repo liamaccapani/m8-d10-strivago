@@ -1,2 +1,2 @@
-# m8-d10-strivago
- strivago with typescript
+# Strivago-teamWork-m8 
+ 
